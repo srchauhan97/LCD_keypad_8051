@@ -1,0 +1,231 @@
+C51 COMPILER V9.50a   MAIN                                                                 02/09/2020 10:14:30 PAGE 1   
+
+
+C51 COMPILER V9.50a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          
+   3          
+   4          sbit RS=P2^0;
+   5          sbit RW=P2^1;
+   6          sbit EN=P2^2; 
+   7          
+   8          
+   9          sbit R1=P3^0;
+  10          sbit R2=P3^1;
+  11          sbit R3=P3^2;
+  12          sbit R4=P3^3;
+  13          sbit C1=P3^4;
+  14          sbit C2=P3^5;
+  15          sbit C3=P3^6;
+  16          sbit C4=P3^7;
+  17          
+  18          
+  19          void lcd_init(void);
+  20          void lcd_command(unsigned char a);
+  21          void lcd_data(unsigned char b);
+  22          void delay(unsigned int c);
+  23          void send_string(unsigned char *ch);
+  24          
+  25          unsigned char Keypad(void);
+  26          
+  27          int main()
+  28          {
+  29   1        //setting ports as output
+  30   1        P1=0x00;
+  31   1        P2=0x00;
+  32   1        P3=0xF0;
+  33   1        lcd_init();
+  34   1        delay(1);
+  35   1        send_string("HI evryone");
+  36   1        lcd_command(0xC0);//next line
+  37   1        send_string("sushant");
+  38   1        lcd_command(0x01);
+  39   1        while(!(Keypad()));
+  40   1        
+  41   1      }
+  42          void lcd_init()
+  43          {
+  44   1        lcd_command(0x01);//clear display
+  45   1        lcd_command(0x06);//shift display to right
+  46   1        lcd_command(0x0C);//disp on cursor off
+  47   1        lcd_command(0x38);//5*7matrix
+  48   1        lcd_command(0x80);//take control to beginning
+  49   1      }
+  50          void lcd_command(unsigned char a)
+  51          {
+  52   1        P1=a;
+  53   1        RS=0;
+  54   1        RW=0;
+  55   1        EN=1;
+C51 COMPILER V9.50a   MAIN                                                                 02/09/2020 10:14:30 PAGE 2   
+
+  56   1        delay(1);
+  57   1        EN=0;
+  58   1      }
+  59          void lcd_data(unsigned char b)
+  60          {
+  61   1        P1=b;
+  62   1        RS=1;
+  63   1        RW=0;
+  64   1        EN=1;
+  65   1        delay(1);
+  66   1        EN=0;
+  67   1      }
+  68          void send_string(unsigned char *ch)
+  69          {
+  70   1        while(*ch != '\0')
+  71   1        {
+  72   2          lcd_data(*ch);
+  73   2          ch++;
+  74   2        }
+  75   1      }
+  76          void delay(unsigned int c)
+  77          {
+  78   1        unsigned int b;
+  79   1        for(b=0;b<1000*c;b++);
+  80   1      }
+  81          
+  82          unsigned char Keypad(void)
+  83          {
+  84   1        C1=C2=C3=C4=1;
+  85   1        
+  86   1        //for r1
+  87   1        
+  88   1        R1=0;
+  89   1        R2=R3=R4=1;
+  90   1        if(C1==0)
+  91   1        {
+  92   2          delay(1);
+  93   2          lcd_data('7');
+  94   2          while(C1==0);
+  95   2        }
+  96   1        if(C2==0)
+  97   1        {
+  98   2          delay(1);
+  99   2          lcd_data('8');
+ 100   2          while(C2==0);
+ 101   2        }
+ 102   1        if(C3==0)
+ 103   1        {
+ 104   2          delay(1);
+ 105   2          lcd_data('9');
+ 106   2          while(C3==0);
+ 107   2        }
+ 108   1        if(C4==0)
+ 109   1        {
+ 110   2          delay(1);
+ 111   2          lcd_data('/');
+ 112   2          while(C4==0);
+ 113   2        }
+ 114   1        
+ 115   1        //for r2
+ 116   1        
+ 117   1          
+C51 COMPILER V9.50a   MAIN                                                                 02/09/2020 10:14:30 PAGE 3   
+
+ 118   1        R2=0;
+ 119   1        R1=R3=R4=1;
+ 120   1        if(C1==0)
+ 121   1        {
+ 122   2          delay(1);
+ 123   2          lcd_data('4');
+ 124   2          while(C1==0);
+ 125   2        }
+ 126   1        if(C2==0)
+ 127   1        {
+ 128   2          delay(1);
+ 129   2          lcd_data('5');
+ 130   2          while(C2==0);
+ 131   2        }
+ 132   1        if(C3==0)
+ 133   1        {
+ 134   2          delay(1);
+ 135   2          lcd_data('6');
+ 136   2          while(C3==0);
+ 137   2        }
+ 138   1        if(C4==0)
+ 139   1        {
+ 140   2          delay(1);
+ 141   2          lcd_data('*');
+ 142   2          while(C4==0);
+ 143   2        }
+ 144   1        //for R3
+ 145   1        R3=0;
+ 146   1        R1=R2=R4=1;
+ 147   1        if(C1==0)
+ 148   1        {
+ 149   2          delay(1);
+ 150   2          lcd_data('1');
+ 151   2          while(C1==0);
+ 152   2        }
+ 153   1        if(C2==0)
+ 154   1        {
+ 155   2          delay(1);
+ 156   2          lcd_data('2');
+ 157   2          while(C2==0);
+ 158   2        }
+ 159   1        if(C3==0)
+ 160   1        {
+ 161   2          delay(1);
+ 162   2          lcd_data('3');
+ 163   2          while(C3==0);
+ 164   2        }
+ 165   1        if(C4==0)
+ 166   1        {
+ 167   2          delay(1);
+ 168   2          lcd_data('-');
+ 169   2          while(C4==0);
+ 170   2        }
+ 171   1        
+ 172   1        //for R4
+ 173   1        R4=0;
+ 174   1        R1=R2=R3=1;
+ 175   1        if(C1==0)
+ 176   1        {
+ 177   2          delay(1);
+ 178   2          lcd_command(0xC0);
+ 179   2          while(C1==0);
+C51 COMPILER V9.50a   MAIN                                                                 02/09/2020 10:14:30 PAGE 4   
+
+ 180   2        }
+ 181   1        if(C2==0)
+ 182   1        {
+ 183   2          delay(1);
+ 184   2          lcd_data('0');
+ 185   2          while(C2==0);
+ 186   2        }
+ 187   1        if(C3==0)
+ 188   1        {
+ 189   2          delay(1);
+ 190   2          lcd_data('=');
+ 191   2          while(C3==0);
+ 192   2        }
+ 193   1        if(C4==0)
+ 194   1        {
+ 195   2          delay(1);
+ 196   2          lcd_data('+');
+ 197   2          while(C4==0);
+ 198   2        }
+ 199   1        
+ 200   1        return 0;
+ 201   1      }
+*** WARNING C290 IN LINE 41 OF main.c: missing return value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    435    ----
+   CONSTANT SIZE    =     19    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
